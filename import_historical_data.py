@@ -8,13 +8,13 @@ connect(host="mongodb://root:s3cr3t@localhost:27017/waterpointa?authSource=admin
 folder_path = "C:/Users/cnasayo/Downloads/wp_vip/txt/"
 txt_files = glob.glob(folder_path + "*.txt")
 
-# Recorrer cada archivo de texto
+
 for txt_file in txt_files:
     print(f"Importinf folder: {txt_file}")
     with open(txt_file, "r") as file:
         lines = file.readlines()[1:]
 
-    # Procesar las líneas y guardar los datos en la colección de MongoDB
+    
     for line in lines:
         
         data = line.split()

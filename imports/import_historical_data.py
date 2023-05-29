@@ -1,5 +1,5 @@
 from mongoengine import *
-from database import *
+from orm.database import *
 import glob
 
 connect(host="mongodb://root:s3cr3t@localhost:27017/waterpointa?authSource=admin")

@@ -1,20 +1,20 @@
 import unittest
 from mongomock import MongoClient
-from database import *
+from orm.database import *
 import glob
 
-# Simular una conexión a MongoDB con mongomock
+# Simulate a conection with mongomuck
 client = MongoClient()
 connect(host=client)
 
-# Obtener la lista de archivos de texto en la carpeta especificada
+# # get the files from a path
 folder_path = "C:/Users/cnasayo/Downloads/wp_vip/txt/"
 txt_files = glob.glob(folder_path + "*.txt")
 
 
 class TestImportData(unittest.TestCase):
     def setUp(self):
-        # Eliminar los documentos de prueba después de cada prueba
+        # Delete the test documents after each test.
         HistoricalData.objects().delete()
 
     def test_import_data(self):
@@ -41,11 +41,11 @@ class TestImportData(unittest.TestCase):
 
                 HistoricalData(**document).save()
 
-            # Verificar que los documentos se hayan guardado correctamente
+            # Verify that the documents have been saved correctly now
             count = HistoricalData.objects().count()
             self.assertEqual(len(lines), count, "Number of saved documents does not match")
 
-            # Verificar que los datos guardados coincidan con los datos originales
+            # Verify that the saved data matches the original data now.
             for i, line in enumerate(lines):
                 data = line.split()
                 date = data[0]

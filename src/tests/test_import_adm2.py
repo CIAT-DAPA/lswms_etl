@@ -8,7 +8,7 @@ from mongomock import MongoClient as MockMongoClient
 
 def save_woreda_to_mongo(dataframe, db_name, collection_name):
     """
-    Save the zone names ('name' column) and their corresponding IDs ('ext_id' column) from a DataFrame to a MongoDB collection.
+    Save the woreda names ('name' column) and their corresponding IDs ('ext_id' column) from a DataFrame to a MongoDB collection.
 
     Args:
         dataframe (pd.DataFrame): The pandas DataFrame containing the 'ext_id' and 'name' columns.
@@ -40,7 +40,7 @@ def save_woreda_to_mongo(dataframe, db_name, collection_name):
 class TestSaveWoredasToMongo(unittest.TestCase):
 
     def setUp(self):
-        # Create a sample DataFrame with zone names and IDs
+        # Create a sample DataFrame with woreda names and IDs
         data = {
             'ext_id': [30117, 60201, 40203],
             'name': ['Senan', 'Mirab Este', '40302'],
@@ -48,16 +48,16 @@ class TestSaveWoredasToMongo(unittest.TestCase):
         }
         self.df = pd.DataFrame(data)
 
-    def test_save_zones_to_mongo(self):
+    def test_save_woredas_to_mongo(self):
         # Define the names of the test database and collection
         db_name = 'test_db'
         collection_name = 'test_collection'
 
-        # Call the function to save zone names to MongoDB
+        # Call the function to save woreda names to MongoDB
         result = save_woreda_to_mongo(self.df, db_name, collection_name)
 
-        # Verify that the zone names were inserted correctly
-        self.assertEqual(result, 3)  # We expect 3 zone names to be inserted
+        # Verify that the woreda names were inserted correctly
+        self.assertEqual(result, 3)  # We expect 3 woreda names to be inserted
 
 if __name__ == '__main__':
     unittest.main()
@@ -103,7 +103,7 @@ def save_woreda_to_mongo(dataframe, db_name, collection_name):
 class TestSaveWoredasToMongo(unittest.TestCase):
 
     def setUp(self):
-        # Create a sample DataFrame with zone names and IDs
+        # Create a sample DataFrame with woreda names and IDs
         data = {
             'ext_id': [30117, 60201, 40203],
             'name': ['Senan', 'Mirab Este', '40302'],
@@ -116,10 +116,10 @@ class TestSaveWoredasToMongo(unittest.TestCase):
         db_name = 'test_db'
         collection_name = 'test_collection'
 
-        # Call the function to save zone names to MongoDB
+        # Call the function to save woreda names to MongoDB
         result = save_woreda_to_mongo(self.df, db_name, collection_name)
 
-        # Verify that the zone names were inserted correctly
+        # Verify that the woreda names were inserted correctly
         self.assertEqual(result, 3)  # We expect 3  woredas to be inserted
 
 if __name__ == '__main__':

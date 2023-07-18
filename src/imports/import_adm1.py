@@ -13,7 +13,7 @@ def log_error(message):
     os.makedirs(error_folder, exist_ok=True)
 
     # Log the error message to a file
-    error_log_file = os.path.join(error_folder, 'error_log.txt')
+    error_log_file = os.path.join(error_folder, 'error_adm1_log.txt')
     with open(error_log_file, 'a') as f:
         f.write(f"{datetime.now()}: {message}\n")
 

@@ -6,9 +6,9 @@ from pymongo import MongoClient
 import unittest
 from mongomock import MongoClient as MockMongoClient
 
-def save_woreda_to_mongo(dataframe, db_name, collection_name):
+def save_watershed_to_mongo(dataframe, db_name, collection_name):
     """
-    Save the woreda names ('name' column) and their corresponding IDs ('ext_id' column) from a DataFrame to a MongoDB collection.
+    Save the watershed names ('name' column) and their corresponding area ('area' column) from a DataFrame to a MongoDB collection.
 
     Args:
         dataframe (pd.DataFrame): The pandas DataFrame containing the 'ext_id' and 'name' columns.
@@ -18,8 +18,8 @@ def save_woreda_to_mongo(dataframe, db_name, collection_name):
     Returns:
         int: The number of documents inserted into the MongoDB collection.
     """
-    # Check if the 'ext_id' and 'name' columns exist in the DataFrame
-    if 'ext_id' not in dataframe.columns or 'name' not in dataframe.columns:
+    # Check if the 'area' and 'name' columns exist in the DataFrame
+    if 'area' not in dataframe.columns or 'name' not in dataframe.columns:
         raise ValueError("The DataFrame must contain 'ext_id' and 'name' columns.")
 
     # Connect to MongoDB (in this case, we use mongomock for in-memory connection)
@@ -28,7 +28,7 @@ def save_woreda_to_mongo(dataframe, db_name, collection_name):
     collection = db[collection_name]
 
     # Convert the DataFrame to a list of documents (dictionaries)
-    data_to_insert = dataframe[['ext_id', 'name']].to_dict(orient='records')
+    data_to_insert = dataframe[['area', 'name']].to_dict(orient='records')
 
     # Insert the documents into the MongoDB collection
     result = collection.insert_many(data_to_insert)
@@ -37,27 +37,30 @@ def save_woreda_to_mongo(dataframe, db_name, collection_name):
     return len(result.inserted_ids)
 
 # Unit Test using unittest
-class TestSaveWoredasToMongo(unittest.TestCase):
+class TestSavewatershedsToMongo(unittest.TestCase):
 
     def setUp(self):
-        # Create a sample DataFrame with woreda names and IDs
+        # Create a sample DataFrame with watershed names and areas
         data = {
-            'ext_id': [30117, 60201, 40203],
-            'name': ['Senan', 'Mirab Este', '40302'],
-            'adm2': ['64b53c99dc061db2fa37fd97', '64b53c99dc061db2fa37fd97', '64b53c99dc061db2fa37fd97'],
+            'area': [0.1697,94.4816,0.105415],
+            'name': ['Jilo Dokicha', 'Burra', 'Dire'],
+            'adm3': ['64b53d9adc061db2fa37fda5', '64b53d9adc061db2fa37fda6', '64b53d9adc061db2fa37fda7'],
         }
         self.df = pd.DataFrame(data)
 
-    def test_save_woredas_to_mongo(self):
+    def test_save_watersheds_to_mongo(self):
         # Define the names of the test database and collection
         db_name = 'test_db'
         collection_name = 'test_collection'
 
-        # Call the function to save woreda names to MongoDB
-        result = save_woreda_to_mongo(self.df, db_name, collection_name)
-
-        # Verify that the woreda names were inserted correctly
-        self.assertEqual(result, 3)  # We expect 3 woreda names to be inserted
+        # Call the function to save watershed names to MongoDB
+        result = save_watershed_to_mongo(self.df, db_name, collection_name)
+        # Verify that the watershed names were inserted correctly
+        self.assertEqual(result, 3)  # We expect 3 watershed names to be inserted
 
 if __name__ == '__main__':
     unittest.main()
+# Install the mongomock library
+# pip install mongomock
+
+

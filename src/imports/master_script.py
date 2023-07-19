@@ -12,7 +12,7 @@ def master_script(selected_files):
             command = f'python "{py_file}"'
             subprocess.run(command, shell=True)
         else:
-            print(f"El archivo '{py_file}' no existe en el directorio actual.")
+            print(f"the file '{py_file}' doesn't exist in the folder.")
 
 if __name__ == "__main__":
     # specific files to execute

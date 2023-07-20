@@ -1,4 +1,4 @@
-import os
+import os, sys
 import subprocess
 
 def master_script(selected_files):
@@ -13,6 +13,7 @@ def master_script(selected_files):
             subprocess.run(command, shell=True)
         else:
             print(f"the file '{py_file}' doesn't exist in the folder.")
+            sys.exit(1)
 
 if __name__ == "__main__":
     # specific files to execute

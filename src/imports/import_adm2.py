@@ -19,8 +19,11 @@ def log_error(message):
     with open(error_log_file, 'a') as f:
         f.write(f"{datetime.now()}: {message}\n")
 
+from datetime import datetime
+
 def etl_adm2(dataframe, cols, cols_woreda):
-    count = 0
+    count_imported = 0
+    count_updated = 0
     try:
         print('The process of importing woredas has begun')
         df_woreda = dataframe[cols].drop_duplicates()
@@ -28,18 +31,28 @@ def etl_adm2(dataframe, cols, cols_woreda):
         print('Dimension', df_woreda.shape)
         for index, row in df_woreda.iterrows():
             ext_id = str(row['ext_id'])
-            if not Adm2.objects(ext_id=ext_id):
-                print('importing', row['name'], ext_id)
-                traced_list = [{"created": datetime.now(), "updated": datetime.now(), "enabled": True}]
+            name = row['name']
+            adm2 = Adm2.objects(ext_id=ext_id).first()
+
+            if not adm2:
+                print('Importing', name, ext_id)
+                trace = {"created": datetime.now(), "updated": datetime.now(), "enabled": True}
                 adm1 = Adm1.objects.get(ext_id=str(row['adm1']))
-                adm2 = Adm2(name=row['name'], ext_id=ext_id, adm1=adm1, traced=traced_list)
+                adm2 = Adm2(name=name, ext_id=ext_id, adm1=adm1, trace=trace)
                 adm2.save()
-                count += 1
-            else:
-                print('not imported', row['name'], ext_id)
-        print(f'imported {count} woredas to the database')
+                count_imported += 1
+            elif adm2.name != name: 
+                print('Updating', name, ext_id)
+                adm2.name = name  # Update the name if it has changed
+                adm2.trace.updated = datetime.now()  # Update the "updated" field in the trace
+                adm2.save()
+                count_updated += 1
+
+        print(f'Imported {count_imported} woredas to the database')
+        print(f'Updated {count_updated} woredas in the database')
     except Exception as e:
         log_error(str(e))
+
 
 try:
     connect(host=get_mongo_conn_str())

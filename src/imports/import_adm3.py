@@ -21,7 +21,8 @@ def log_error(message):
         f.write(f"{datetime.now()}: {message}\n")
 
 def etl_adm3(dataframe, cols, cols_kebele):
-    count = 0
+    count_imported = 0
+    count_updated = 0
     try:
         print('The process of importing kebeles has begun')
         df_kebele = dataframe[cols].drop_duplicates()
@@ -29,17 +30,25 @@ def etl_adm3(dataframe, cols, cols_kebele):
         print('Dimension', df_kebele.shape)
         for index, row in df_kebele.iterrows():
             ext_id = str(row['ext_id'])
-            if not Adm3.objects(ext_id=ext_id):
-                traced_list = [{"created": datetime.now(), "updated": datetime.now(), "enabled": True}]
-                print('importing', row['name'], ext_id)
+            name = str(row['name'])
+            adm3 = Adm3.objects(ext_id=ext_id).first()
+
+            if not adm3:
+                trace = {"created": datetime.now(), "updated": datetime.now(), "enabled": True}
+                print('Importing', name, ext_id)
                 adm2 = Adm2.objects.get(ext_id=str(row['adm3']))
-                if row['name'] is not None:
-                    adm3 = Adm3(name=str(row['name']), ext_id=ext_id, adm2=adm2, traced=traced_list, aclimate_id=str(row['aclimate_id']))
-                    adm3.save()
-                    count += 1
-            else:
-                print('not imported', row['name'], ext_id)
-        print(f'imported {count} kebeles to the database')
+                adm3 = Adm3(name=name, ext_id=ext_id, adm2=adm2, trace=trace, aclimate_id=str(row['aclimate_id']))
+                adm3.save()
+                count_imported += 1
+            elif adm3.name != name:
+                print('Updating', name, ext_id)
+                adm3.name = name  # Update the name if it has changed
+                adm3.trace.updated = datetime.now()  # Update the "updated" field in the traced list
+                adm3.save()
+                count_updated += 1
+
+        print(f'Imported {count_imported} kebeles to the database')
+        print(f'Updated {count_updated} kebeles in the database')
     except Exception as e:
         log_error(str(e))
 

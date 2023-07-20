@@ -18,23 +18,33 @@ def log_error(message):
         f.write(f"{datetime.now()}: {message}\n")
 
 def etl_adm1(dataframe, cols, cols_zone):
-    count = 0
+    count_imported = 0
+    count_updated = 0
     try:
-        print('The process of importing zones has begun')
+        print('The zone import process has started')
         df_zone = dataframe[cols].drop_duplicates()
         df_zone.columns = cols_zone
-        print('Dimension', df_zone.shape)
+        print('Dimensión', df_zone.shape)
         for index, row in df_zone.iterrows():
             ext_id = str(row['ext_id'])
-            if not Adm1.objects(ext_id=ext_id):
-                print('importing', row['name'], ext_id)
-                traced_list = [{"created": datetime.now(), "updated": datetime.now(), "enabled": True}]
-                adm1 = Adm1(name=row['name'], ext_id=ext_id, traced=traced_list)
+            name = row['name']
+            adm1 = Adm1.objects(ext_id=ext_id).first()
+
+            if not adm1:
+                print('Creating', name, ext_id)
+                trace = {"created": datetime.now(), "updated": datetime.now(), "enabled": True}
+                adm1 = Adm1(name=name, ext_id=ext_id, trace=trace)
                 adm1.save()
-                count += 1
-            else:
-                print('not imported', row['name'], ext_id)
-        print(f'imported {count} zones to the database')
+                count_imported += 1
+            elif adm1.name != name:
+                print('Updating', name, ext_id)
+                adm1.name = name  # uptathe the name if changed
+                adm1.updated = datetime.now()  # Update the field"updated"
+                adm1.save()
+                count_updated += 1
+
+        print(f'{count_imported} zones have been imported into the database.')
+        print(f'{count_updated} zones have been updated in the database.')
     except Exception as e:
         log_error(str(e))
 

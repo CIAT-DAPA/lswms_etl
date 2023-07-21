@@ -19,7 +19,7 @@ def log_error(message):
     with open(error_log_file, 'a') as f:
         f.write(f"{datetime.now()}: {message}\n")
 
-from datetime import datetime
+
 
 def etl_adm2(dataframe, cols, cols_woreda):
     count_imported = 0

@@ -7,6 +7,7 @@ import pandas as pd
 import geopandas as gdp
 from shapely.geometry import Point
 import psycopg2
+import numpy as np
 
 def get_dataframe():
     conn = None
@@ -120,7 +121,7 @@ def get_complete_dataframe_to_import():
         totaldataframe['name_adm3'][0] = proof12
         proof13='hola soy nuevo 6.0'
         totaldataframe['name_adm4'][0] = proof13
-
+        totaldataframe.replace(np.nan, None, inplace=True)
         return totaldataframe
     except Exception as e:
         # Create an "error" folder if it doesn't exist

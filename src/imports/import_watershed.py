@@ -31,7 +31,7 @@ def etl_watershed(dataframe, cols, cols_watershed):
         for index, row in df_watershed.iterrows():
             name = str(row['name'])
             if not Watershed.objects(name=name):
-                print('importing', row['adm3'])
+                print('importing', row['name'])
                 trace = {"created": datetime.now(), "updated": datetime.now(), "enabled": True}
                 adm3 = Adm3.objects.get(name=str(row['adm3']))
                 watershed = Watershed(name=row['name'], area=row['area'], trace=trace, adm3=adm3)

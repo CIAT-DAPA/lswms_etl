@@ -17,6 +17,6 @@ def master_script(selected_files):
 
 if __name__ == "__main__":
     # specific files to execute
-    selected_files_to_execute = ["import_adm1.py", "import_adm2.py","import_adm3.py","import_watershed.py"]
+    selected_files_to_execute = ["import_adm1.py", "import_adm2.py","import_adm3.py","import_watershed.py","import_waterpoint.py","create_climatology.py"]
 
     master_script(selected_files_to_execute)

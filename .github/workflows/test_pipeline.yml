@@ -76,7 +76,7 @@ jobs:
         fetch-depth: '0'
     # Scripts Zip
     - name: Zip artifact for deployment
-      run: zip releaseScripts.zip ./src/* -r
+      run: zip releaseETL.zip ./src/* -r
     # Upload Artifacts
     - name: Upload Scripts artifact for deployment job
       uses: actions/upload-artifact@v3

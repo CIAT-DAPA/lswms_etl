@@ -1,6 +1,6 @@
 # EWP ETL
 
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/CIAT-DAPA/lswms_models) ![](https://img.shields.io/github/v/tag/CIAT-DAPA/lswms_models)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/CIAT-DAPA/lswms_etl) ![](https://img.shields.io/github/v/tag/CIAT-DAPA/lswms_etl)
 
 **Important notes**
 
@@ -18,7 +18,7 @@ To use these Models, it is necessary to have a MongoDB instance running and be c
 
 - Python 3.x
 - MongoDB
-- [modelswp](https://github.com/CIAT-DAPA/spcat_orm)
+- [modelswp](https://github.com/CIAT-DAPA/lswms_models)
 
 ### Project Structure
 

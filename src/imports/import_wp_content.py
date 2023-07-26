@@ -12,7 +12,7 @@ from parameters.get_file import *
 
 connect(host=get_mongo_conn_str())
 
-data = pd.read_csv(get_profiles_watershed_file(), delimiter=";")
+data = pd.read_csv(get_profiles_watershed_file(), delimiter=";",encoding='latin-1')
 gender = Typecontent.objects.get(name='gender')
 climate = Typecontent.objects.get(name='climate')
 challengue = Typecontent.objects.get(name='challenges')
@@ -67,9 +67,9 @@ def update_wpc_climate(waterpoint, temp, tempmax, tempmin, precipitation):
     if existing_wpc_climate:
         # Si el documento Wpcontent existe, actualiza los datos de clima y el campo "updated" en el diccionario "trace"
         existing_wpc_climate.content['values'][0]['temp'] = temp
-        existing_wpc_climate.content['values'][0]['tempmax'] = tempmax
-        existing_wpc_climate.content['values'][0]['tempmin'] = tempmin
-        existing_wpc_climate.content['values'][0]['precipitation'] = precipitation
+        existing_wpc_climate.content['values'][1]['tempmax'] = tempmax
+        existing_wpc_climate.content['values'][2]['tempmin'] = tempmin
+        existing_wpc_climate.content['values'][3]['precipitation'] = precipitation
         existing_wpc_climate.content['trace']['updated'] = datetime.now()
         existing_wpc_climate.save()
     else:
@@ -109,9 +109,9 @@ def update_wpc_challenge(waterpoint, challenge1, challenge2, challenge3, challen
     if existing_wpc_challenge:
         # Si el documento Wpcontent existe, actualiza los datos de los desafíos y el campo "updated" en el diccionario "trace"
         existing_wpc_challenge.content['values'][0]['1'] = challenge1
-        existing_wpc_challenge.content['values'][0]['2'] = challenge2
-        existing_wpc_challenge.content['values'][0]['3'] = challenge3
-        existing_wpc_challenge.content['values'][0]['4'] = challenge4
+        existing_wpc_challenge.content['values'][1]['2'] = challenge2
+        existing_wpc_challenge.content['values'][2]['3'] = challenge3
+        existing_wpc_challenge.content['values'][3]['4'] = challenge4
         existing_wpc_challenge.content['trace']['updated'] = datetime.now()
         existing_wpc_challenge.save()
     else:
@@ -148,13 +148,13 @@ def update_wpc_agriculture(waterpoint, crop1, crop2, crop3, goat, sheep, cattle,
     if existing_wpc_agriculture:
         # Si el documento Wpcontent existe, actualiza los datos de agricultura y el campo "updated" en el diccionario "trace"
         existing_wpc_agriculture.content['values'][0]['crop'] = crop1
-        existing_wpc_agriculture.content['values'][0]['crop2'] = crop2
-        existing_wpc_agriculture.content['values'][0]['crop3'] = crop3
-        existing_wpc_agriculture.content['values'][0]['goat'] = goat
-        existing_wpc_agriculture.content['values'][0]['sheep'] = sheep
-        existing_wpc_agriculture.content['values'][0]['cattle'] = cattle
-        existing_wpc_agriculture.content['values'][0]['camel'] = camel
-        existing_wpc_agriculture.content['values'][0]['donkey'] = donkey
+        existing_wpc_agriculture.content['values'][1]['crop2'] = crop2
+        existing_wpc_agriculture.content['values'][2]['crop3'] = crop3
+        existing_wpc_agriculture.content['values'][3]['goat'] = goat
+        existing_wpc_agriculture.content['values'][4]['sheep'] = sheep
+        existing_wpc_agriculture.content['values'][5]['cattle'] = cattle
+        existing_wpc_agriculture.content['values'][6]['camel'] = camel
+        existing_wpc_agriculture.content['values'][7]['donkey'] = donkey
         existing_wpc_agriculture.content['trace']['updated'] = datetime.now()
         existing_wpc_agriculture.save()
     else:
@@ -199,7 +199,7 @@ def update_wpc_livehood(waterpoint, liv, liv1):
     if existing_wpc_livehood:
         # Si el documento Wpcontent existe, actualiza los datos de medios de vida y el campo "updated" en el diccionario "trace"
         existing_wpc_livehood.content['values'][0]['1'] = liv
-        existing_wpc_livehood.content['values'][0]['2'] = liv1
+        existing_wpc_livehood.content['values'][1]['2'] = liv1
         existing_wpc_livehood.content['trace']['updated'] = datetime.now()
         existing_wpc_livehood.save()
     else:
@@ -239,9 +239,9 @@ def update_wpc_general(waterpoint, construction, owned, constructed, status):
     if existing_wpc_general:
         # Si el documento Wpcontent existe, actualiza los datos generales y el campo "updated" en el diccionario "trace"
         existing_wpc_general.content['values'][0]['construction'] = construction
-        existing_wpc_general.content['values'][0]['owned'] = owned
-        existing_wpc_general.content['values'][0]['constructed'] = constructed
-        existing_wpc_general.content['values'][0]['status in dry season'] = status
+        existing_wpc_general.content['values'][1]['owned'] = owned
+        existing_wpc_general.content['values'][2]['constructed'] = constructed
+        existing_wpc_general.content['values'][3]['status in dry season'] = status
         existing_wpc_general.content['trace']['updated'] = datetime.now()
         existing_wpc_general.save()
     else:

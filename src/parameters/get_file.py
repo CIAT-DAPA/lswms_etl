@@ -45,3 +45,22 @@ def get_watershed_file():
             f.write(str(e) + '\n')
         return None
 
+
+def get_profiles_watershed_file():
+    try:
+        file_name = 'profile'
+        file_csv_profile = os.path.join(data_path, file_name + '.csv')
+        if os.path.exists(file_csv_profile):
+            return file_csv_profile
+        else:
+            raise FileNotFoundError(f"CSV file {file_name}.csv not found in directory: {data_path}")
+    except Exception as e:
+        # Create an "error" folder if it doesn't exist
+        error_folder = os.path.join(os.path.dirname(__file__), '..', 'error')
+        os.makedirs(error_folder, exist_ok=True)
+
+        # Log the error message to a file
+        error_log_file = os.path.join(error_folder, 'error_geting_csv_profiles_file_log.txt')
+        with open(error_log_file, 'a') as f:
+            f.write(str(e) + '\n')
+        return None

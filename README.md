@@ -1,43 +1,115 @@
-ETL WATERPOINTS
-This project is a Proof of Concept (POC) for the Extraction, Transformation, and Loading (ETL) process of water point data in Ethiopia. The aim is to extract relevant information from water points across Ethiopia, including their historical climatic data, historical usage data, as well as administrative level data such as zone, woreda, and kebele to which they belong. Additionally, data related to the water points and their corresponding watersheds will be extracted and processed.
+# EWP ETL
 
-Purpose
-The primary purpose of this ETL process is to gather comprehensive data on water points in Ethiopia, allowing researchers, policymakers, and humanitarian organizations to analyze and understand the state of water infrastructure and access across different regions. By integrating historical climatic data and usage patterns, this data can be utilized to identify trends, patterns, and potential challenges related to water availability and usage.
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/CIAT-DAPA/lswms_models) ![](https://img.shields.io/github/v/tag/CIAT-DAPA/lswms_models)
 
-Data Sources
-The data for this ETL process will be sourced from various reliable and publicly available datasets, including:
+**Important notes**
 
-Water Points Data: Information on water points such as location, functionality, usage history, and other related attributes.
+These Scripts must be used in conjunction with the models that was developed for the project, which you can find in this [repository](https://github.com/CIAT-DAPA/lswms_models).
+## Features
 
-Climatic Data: Historical weather and climate data for the regions where the water points are located.
+- Built using Mongoengine for MongoDB
+- Supports Python 3.x
 
-Administrative Data: Data on administrative divisions, including zone, woreda, and kebele, to which the water points belong.
+## Getting Started
 
-Watershed Data: Information about the watersheds to which the water points are geographically associated.
+To use these Models, it is necessary to have a MongoDB instance running and be connected to the postgres database where the water points are stored..
 
-ETL Process
-The ETL process consists of the following key steps:
+### Prerequisites
 
-Extraction: Data will be extracted from the respective data sources mentioned above. APIs, web scraping, or direct downloads may be employed as required.
+- Python 3.x
+- MongoDB
+- [modelswp](https://github.com/CIAT-DAPA/spcat_orm)
 
-Transformation: Extracted data will be cleaned, processed, and transformed into a structured format suitable for analysis. This step involves data normalization, handling missing values, and aggregating relevant information.
+### Project Structure
 
-Loading: The transformed data will be loaded into a database or data warehouse for efficient storage and retrieval. This step will ensure data integrity and consistency.
+- `conf/`: Folder where the database credentials will be saved.
+- `error/`: Folder where all errors will be saved, (it is not necessary to create it, it is created automatically when an error is found).
+- `imports/`: This folder contains the Python scripts used for data import.
+- `Data` : This folder contains a shapefile with the administrative levels of ethiopia, this file is used to import the administrative levels in the database, it also contains a csv file with the water points to extract from the postgres database and the watershed to which they belong, and finally a csv file with the water point profiles. 
 
-Requirements
-To run this ETL process, the following requirements must be met:
 
-Python 3.x or higher with necessary libraries for data manipulation and processing.
-Access to the data sources or datasets required for extraction.
-A database or data warehouse to store the processed data.
-How to Use
-Clone the repository to your local machine.
+## Visual folder structure
 
-Install the required Python libraries using the provided requirements.txt file.
+Main Directory: MyProject
+├── conf
+├── data
+│   ├── adminlevel
+│   │   ├── shapefile1.shp
+│   │   ├── shapefile1.shx
+│   │   ├── shapefile1.dbf
+│   │   ├── shapefile2.shp
+│   │   ├── shapefile2.shx
+│   │   ├── shapefile2.dbf
+│   │   ├── shapefile3.shp
+│   │   ├── shapefile3.shx
+│   │   ├── shapefile3.dbf
+│   │   ├── shapefile4.shp
+│   │   ├── shapefile4.shx
+│   │   └── shapefile4.dbf
+│   ├── profile.xlsx
+│   └── whade.xlsx
+├── error
+├── parameters
+├── imports
+└── tests
 
-Configure the necessary credentials or API keys, if applicable, to access the data sources.
+## Instalation
 
-Execute the ETL script to initiate the extraction, transformation, and loading process.
+To use ETL we must install a set of requirements, which are in a text file, for this process we recommend to create a virtual environment, this in order not to install these requirements in the entire operating system.
 
-Contribution
-Contributions to this project are welcome! If you have any improvements, bug fixes, or additional features to suggest, please feel free to open an issue or submit a pull request.
+1. Clone the repository
+````sh
+git clone https://github.com/CIAT-DAPA/lswms_etl.git
+````
+
+2. Create a virtual environment
+````sh
+python -m venv env
+````
+
+3. Activate the virtual environment
+- Linux
+````sh
+source env/bin/activate
+````
+- windows
+````sh
+env\Scripts\activate.bat
+````
+
+4. Install the required packages
+
+````sh
+pip install -r requirements.txt
+````
+
+## config file example
+
+
+The project uses a configuration file `config.conf` to adjust certain parameters. Below is an example of how the `config.conf` file looks like:
+
+
+# Application Configuration
+
+this is an example of the configuration file you should create, with the parameters you are going to use to connect to the database
+
+[db_conf]
+mongo_user = mongouser
+mongo_pass = mongopass
+mongo_port = mongoport 
+mongo_db_host = mongo host
+mongo_db_name = mongodbname
+postgres_user = postgresuser
+postgres_pass = postgrespass
+postgres_port = postgresport
+postgres_db_host = postgreshost
+potgres_db_name = postgresdatabasename
+
+
+## Scripts import summary
+
+
+### import_adm1
+
+Scripts to import the admin level one in the database.
+

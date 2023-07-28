@@ -62,8 +62,11 @@ except Exception as e:
 dataframe = get_complete_dataframe_to_import()
 if dataframe is not None:
     # define the columns of the shapefile to be imported, code, and name for the woreda and zone code
-    cols_kebele = ['ext_id', 'name', 'adm3', 'aclimate_id']
-    cols = ['id_adm4', 'name_adm4', 'id_adm3', 'ws_id']
+        #define the columns of shape file to be imported code and name for the woreda and zone code
+    cols_kebele=['ext_id','name','adm3','aclimate_id']
+    df,columns= get_dataframe_shp()
+    del df
+    cols= columns[-1]
     etl_adm3(dataframe, cols, cols_kebele)
 else:
     log_error('Please check your shapefile and path')

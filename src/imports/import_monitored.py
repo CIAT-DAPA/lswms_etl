@@ -90,7 +90,7 @@ def etl_monitored(df):
                 count+=1
 
             else:
-                print(f"{waterpoint.name},'recored date '{d} not imported already in the database")
+                print(f"'recored date '{d} not imported already in the database")
 
 
     return

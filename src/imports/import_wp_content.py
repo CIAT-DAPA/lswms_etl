@@ -41,17 +41,13 @@ def update_wpc_gender(waterpoint, male, female):
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+       
         content_data = {
             "title": gender.name,
             "type": "int",
             "values": [{"male": male}, {"female": female}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         wpc = Wpcontent(
@@ -79,17 +75,13 @@ def update_wpc_climate(waterpoint, temp, tempmax, tempmin, precipitation):
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":climate.name,
             "type":"int",
             "values": [{"temp": temp},{"tempmax": tempmax},{"tempmin": tempmin} ,{"precipitation": precipitation}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
 
@@ -121,17 +113,14 @@ def update_wpc_challenge(waterpoint, challenge1, challenge2, challenge3, challen
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
+
         content_data = {
             "title":challengue.name,
             "type":"string",
             "values": [{"1": challenge1}, {'2': challenge2}, {'3': challenge3}, {'4': challenge4}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         wpcch = Wpcontent(
@@ -164,11 +153,7 @@ def update_wpc_agriculture(waterpoint, crop1, crop2, crop3, goat, sheep, cattle,
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":agriculture.name,
             "type":"string",
@@ -183,7 +168,7 @@ def update_wpc_agriculture(waterpoint, crop1, crop2, crop3, goat, sheep, cattle,
                 {"donkey": donkey} 
             ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         wpca = Wpcontent(
@@ -209,11 +194,7 @@ def update_wpc_livehood(waterpoint, liv, liv1):
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":livehood.name,
             "type":"string",
@@ -222,7 +203,7 @@ def update_wpc_livehood(waterpoint, liv, liv1):
                 {"2": liv1}
             ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         wpcl = Wpcontent(
@@ -251,11 +232,7 @@ def update_wpc_general(waterpoint, construction, owned, constructed, status):
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":general.name,
             "type":"string",
@@ -266,7 +243,7 @@ def update_wpc_general(waterpoint, construction, owned, constructed, status):
                {"status in dry season": status}
                 ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         wpcg = Wpcontent(
@@ -319,17 +296,13 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":gender.name,
             "type":"int",
             "values": [{"male": male},{"female":female}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos "male" y "female" si no existe
@@ -353,17 +326,13 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":climate.name,
             "type":"int",
             "values": [{"temp": temp},{"tempmax": tempmax},{"tempmin": tempmin} ,{"precipitation": precipitation}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos de clima si no existe
@@ -390,17 +359,13 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":challengue.name,
             "type":"string",
             "values": [{"1": challenge1}, {'2': challenge2}, {'3': challenge3}, {'4': challenge4}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos de clima si no existe
@@ -427,11 +392,7 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title": agriculture.name,
             "type":"string",
@@ -446,7 +407,7 @@ for index, row in data.iterrows():
                 {"donkey": donkey} 
             ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos de clima si no existe
@@ -468,11 +429,6 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
         content_data = {
             "title":livehood.name,
             "type":"string",
@@ -481,7 +437,7 @@ for index, row in data.iterrows():
                 {"2": liv1}
             ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos de clima si no existe
@@ -507,11 +463,6 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
         content_data = {
             "title":general.name,
             "type":"string",
@@ -522,7 +473,7 @@ for index, row in data.iterrows():
                {"status in dry season": status}
                 ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos de clima si no existe

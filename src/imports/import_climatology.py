@@ -1,3 +1,5 @@
+#this etl script updates the climatology of depth ande evp elements from the monitored  waterpoint 
+#-----------------------------------------
 import os
 import sys
 import psycopg2
@@ -11,6 +13,7 @@ from parameters.get_connection import *
 from parameters.get_file import *
 from imports.import_dataframe import *
 
+#log_error which logs the errors in this scrip occured during the updating the median
 def log_error(message):
     # Create an "error" folder if it doesn't exist
     error_folder = os.path.join(os.path.dirname(__file__), '..', 'error')
@@ -21,7 +24,20 @@ def log_error(message):
     with open(error_log_file, 'a') as f:
         f.write(f"{datetime.now()}: {message}\n")
 
-def get_wpmonitored():
+#connection function to mongodb
+try:
+    connect(host=get_mongo_conn_str())
+    print('MongoDB connection established')
+except Exception as e:
+    log_error('Error in connecting MongoDB database: ' + str(e))
+    sys.exit()
+
+
+#we use this list to filter record which are in waterpoint collection
+wp_indb=[int(ext_id.ext_id) for ext_id in Waterpoint.objects]
+
+#this function connects to postgress to retrive the  location data(monitored data) and returns as a pandas dataframe
+def get_wpmonitored(wp_indb):
     conn = None
     try:
         conn = psycopg2.connect(get_postres_conn_str())
@@ -31,56 +47,32 @@ def get_wpmonitored():
         log_error('Error in connecting PostgreSQL database: ' + str(ex))
         sys.exit()
 
-    sql = "select location_id,date,day,rain,evap,depth,scaled_depth from location_data where location_id=ANY (select uid from locations where country='Ethiopia');"
+    sql = f"select location_id,date,day,rain,evap,depth,scaled_depth from location_data where location_id=ANY (select uid from locations where country='Ethiopia' and  uid in {tuple(wp_indb)});"
     cur.execute(sql)
     results = cur.fetchall()
 
     # Create a DataFrame with the results
-    df = pd.DataFrame(results, columns=['location_id', 'date', 'day', 'rain', 'evap', 'depth', 'scaled_depth'])
+    df = pd.DataFrame(results, columns=['location_id', 'date', 'month_day', 'rain', 'evap', 'depth', 'scaled_depth'])
     return df
 
-try:
-    connect(host=get_mongo_conn_str())
-    print('MongoDB connection established')
-except Exception as e:
-    log_error('Error in connecting MongoDB database: ' + str(e))
-    sys.exit()
 
-df = get_wpmonitored()
+#call and get the dataframe as input for median process
+df = get_wpmonitored(wp_indb)
 
-def get_month(x):
-    x = str(x)
-    if len(x) == 3:
-        month = x[0]
-        day = x[1:3]
-    elif len(x) == 4:
-        month = x[:2]
-        day = x[2:4]
-    return month
-
-def get_day(x):
-    x = str(x)
-    if len(x) == 3:
-        month = x[0]
-        day = x[1:3]
-    elif len(x) == 4:
-        month = x[:2]
-        day = x[2:4]
-    return day
-
+#this function process takes dataframe parameter as input, assign new day and month inputs from the dataframe, and calculates the median and returns as a dataframe
 def medain_depth(df):
-    df_filterd = df[['location_id', 'day', 'rain', 'evap', 'depth', 'scaled_depth']]
-    df_grouped = df_filterd.groupby(['location_id', 'day']).median().reset_index()
-    df_grouped['month'] = df_grouped.day.apply(get_month)
-    df_grouped['day'] = df_grouped.day.apply(get_day)
+    df['date']=pd.to_datetime(df['date'])
+    df=df.assign(month=df.date.dt.month,day=df.date.dt.day)
+    df_filterd=df[['location_id','month_day','month','day','rain', 'evap','depth', 'scaled_depth']]
+    df_grouped=df_filterd.groupby(['location_id','month_day']).median().reset_index()
+    df_grouped=df_grouped.drop(columns=['month_day'])
     return df_grouped
 
+#this function process the input to mongodb Waterpoint collection and climatology list field
 def etl_wpcontent(dataframe):
     count = 0
     print('Running the update function')
     from datetime import datetime
-    wp_lists = [int(ext_id.ext_id) for ext_id in Waterpoint.objects]
-    dataframe = dataframe[dataframe.location_id.isin(wp_lists)]
     for i in dataframe.location_id.unique():
         climate = []
         for index, row in dataframe[dataframe['location_id'] == i].iterrows():
@@ -90,7 +82,7 @@ def etl_wpcontent(dataframe):
             climate_list = [{"month": row['month'], "day": row['day'], "values": values_list}]
             climate.append(climate_list)
         try:
-            wp = Waterpoint.objects.get(ext_id=str(row['location_id']))
+            wp = Waterpoint.objects.get(ext_id=str(int(row['location_id'])))
             print('Updating climatology subset', wp.name)
             wp.update(climatology=climate, trace=trace)
             count += 1
@@ -99,4 +91,5 @@ def etl_wpcontent(dataframe):
 
     print(f'Updated {count} waterpoints with climatology data in the database')
 
+#call the function to make the inputs to the mongodb Waterpoint collection
 etl_wpcontent(medain_depth(df))

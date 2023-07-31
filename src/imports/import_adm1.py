@@ -57,9 +57,15 @@ except Exception as e:
 
 dataframe = get_complete_dataframe_to_import()
 if dataframe is not None:
-    # define the columns of shape file to be imported code and name for the woreda and zone code
-    cols_zone = ['ext_id', 'name']
-    cols = ['id_adm2', 'name_adm2']
-    etl_adm1(dataframe, cols, cols_zone)
+    #define the columns of shape file to be imported code and name for the woreda and zone code
+    cols_zone=['ext_id','name']
+    #cols=['id_adm2','name_adm2']
+    dataframe=get_complete_dataframe_to_import()
+    df,columns= get_dataframe_shp()
+    del df
+    cols=columns[0]
+    #call the adm1 function with arguments geo-dtaframe, columns to be filterd and zone
+    etl_adm1(dataframe,cols,cols_zone)
+
 else:
     log_error('please check your shape file and path')

@@ -47,15 +47,25 @@ def get_dataframe_with_watershed():
             f.write(str(e) + '\n')
         return None
     
-
 def get_dataframe_shp():
     try:
         gdf = gdp.read_file(get_shp_file_import())
         # Apply coordinate systems
         adminlevels = gdf.to_crs("EPSG:4326")
-        adminlevels = adminlevels[["id_adm1", "id_adm2", "id_adm3", "id_adm4", "name_adm1", "name_adm2",
-                                   "name_adm3", "name_adm4", "ws_id", "geometry"]]
-        return adminlevels
+        cols_adm1=['id_adm2','name_adm2']
+        cols_adm2=['id_adm3','name_adm3','id_adm2']
+        cols_adm3=['id_adm4','name_adm4','id_adm3','ws_id']
+        #filter only unique columns avoid repeated columns
+        list_cols=np.unique(cols_adm1+cols_adm2+cols_adm3)
+        list_err=[]
+        #check the input columns are in the geo-dataframe column index
+        for col in list_cols:
+            if col not in adminlevels.columns:
+                list_err.append(col)
+        if len(list_err)==0:
+            cols=[cols_adm1,cols_adm2,cols_adm3]
+            adminleve1s=adminlevels[list(np.append(list_cols,"geometry"))]
+            return adminleve1s,cols
     except Exception as e:
         # Create an "error" folder if it doesn't exist
         error_folder = os.path.join(os.path.dirname(__file__), '..', 'error')
@@ -114,7 +124,8 @@ def get_complete_dataframe_to_import():
         geodata['geometry'][9] = proof10
         
         # Perform the spatial join
-        totaldataframe = gdp.sjoin(geodata, get_dataframe_shp(), how="left", predicate="within")
+        gdf,cols=get_dataframe_shp()
+        totaldataframe = gdp.sjoin(geodata, gdf, how="left", predicate="within")
         proof11='hola soy nuevo 4.0'
         totaldataframe['name_adm2'][0] = proof11
         proof12='hola soy nuevo 5.0'

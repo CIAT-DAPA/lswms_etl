@@ -24,9 +24,9 @@ except:
 #we use this list to filter record which are in waterpoint collection
 wp_indb=[int(ext_id.ext_id) for ext_id in Waterpoint.objects]
 
-#connection to the postgres
+#connection to the postgres and return the dataframe
 #retrive location data and return the dataframe for both monitoring and climatology
-#the function has the argument wp_indb to filter the table from postgres table location_data and it returns a dataframe to be imported to monogo
+#the function has the argument wp_indb to filter the table from postgres table location_data based on the existing waterpoints in mongodb
 def get_wpmonitored(wp_indb):
     conn = None
     try:

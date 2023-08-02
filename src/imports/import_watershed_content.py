@@ -42,7 +42,7 @@ def update_wsc_water_source(watershed, ws1, ws2, ws3, ws4,ws5,ws6):
 
         content_data = {
             "title":water_sources.name,
-            "type":"int",
+            "type":"list",
             "values": [{"ws1": ws1},{"ws2": ws2},{"ws3": ws3},{"ws4": ws4},{"ws5": ws5},{"ws6": ws6}],
             "trace": trace,
             "language": "en"
@@ -80,8 +80,8 @@ def update_wsc_seasons(watershed, s1, s2, s3, s4,s1m,s2m,s3m,s4m):
        
         content_data = {
             "title":seasons.name,
-            "type":"int",
-            "values": [{"s1": s1},{"s2":s2},{"s3": s3},{"s4": s4},{"s1m": s1m},{"s2m": s2m},{"s3m": s3m},{"s4m": s4m}],
+            "type":"list",
+            "values": [{s1: s1m},{s2: s2m},{s3: s3m},{s4: s4m}],
             "trace": trace,
             "language": "en"
         }
@@ -113,7 +113,7 @@ def update_wsc_zone_overview(watershed, topography,hidrology,demography):
        
         content_data = {
             "title":zone_overview.name,
-            "type":"string",
+            "type":"text",
             "values": [{"topography": topography},{"hidrology":hidrology},{"demography": demography}],
             "trace": trace,
             "language": "en"
@@ -149,7 +149,7 @@ for index, row in data.iterrows():
     update_wsc_seasons(watershed, s1, s2, s3, s4,s1m,s2m,s3m,s4m)
     update_wsc_zone_overview(watershed, topography,hidrology,demography)
     # Verificar si ya existe un documento Wpcontent para el tipo de contenido "gender" y el Waterpoint actual
-    existing_wpc_water_source = Wscontent.objects(type=water_sources, watershed=watershed).first()
+    """ existing_wpc_water_source = Wscontent.objects(type=water_sources, watershed=watershed).first()
     if not existing_wpc_water_source:
         ws1 = row["watersource1"]       
         ws2 = row["watersource2"]       
@@ -198,8 +198,8 @@ for index, row in data.iterrows():
 
         content_data = {
             "title":seasons.name,
-            "type":"int",
-            "values": [{"s1": s1},{"s2":s2},{"s3": s3},{"s4": s4},{"s1m": s1m},{"s2m": s2m},{"s3m": s3m},{"s4m": s4m}],
+            "type":"list",
+            "values": [{s1: s1m},{s2: s2m},{s3: s3m},{s4: s4m}],
             "trace": trace,
             "language": "en"
         }
@@ -225,7 +225,7 @@ for index, row in data.iterrows():
 
         content_data = {
             "title":zone_overview.name,
-            "type":"int",
+            "type":"text",
             "values": [{"topography": topography},{"hidrology":hidrology},{"demography": demography}],
             "trace": trace,
             "language": "en"
@@ -237,4 +237,4 @@ for index, row in data.iterrows():
             watershed=watershed,
             type=zone_overview,
         )
-        wsz.save()
+        wsz.save() """

@@ -44,7 +44,7 @@ def update_wpc_gender(waterpoint, male, female):
        
         content_data = {
             "title": gender.name,
-            "type": "int",
+            "type": "icon-y",
             "values": [{"male": male}, {"female": female}],
             "trace": trace,
             "language": "en" 
@@ -116,8 +116,8 @@ def update_wpc_challenge_agriculture(waterpoint, challenge1, challenge4):
 
 
         content_data = {
-            "title":f"{challengue.name} agriculture",
-            "type":"string",
+            "title":f"{challengue.name} livestock",
+            "type":"icon-x",
             "values": [{"1": challenge1}, {'2': challenge4}],
             "trace": trace,
             "language": "en" 
@@ -153,7 +153,7 @@ def update_wpc_challenge_crops(waterpoint, challenge2, challenge3):
 
         content_data = {
             "title":f"{challengue.name} crops",
-            "type":"string",
+            "type":"icon-x",
             "values": [{"1": challenge3}, {'2': challenge3}],
             "trace": trace,
             "language": "en" 
@@ -189,7 +189,7 @@ def update_wpc_agriculture(waterpoint, crop1, crop2, crop3):
 
         content_data = {
             "title":f"{agriculture.name} crops",
-            "type":"string",
+            "type":"icon-y",
             "values": [
                 {"crop": crop1},
                 {"crop2": crop2},
@@ -231,7 +231,7 @@ def update_wpc_agriculture_livestock(waterpoint, goat, sheep, cattle, camel, don
 
         content_data = {
             "title":f"{agriculture.name} livestock",
-            "type":"string",
+            "type":"icon-y",
             "values": [
                 {"goat": goat} ,
                 {"sheep": sheep},
@@ -270,7 +270,7 @@ def update_wpc_livehood(waterpoint, liv, liv1):
 
         content_data = {
             "title":livehood.name,
-            "type":"string",
+            "type":"icon-y",
             "values": [
                 {"1": liv},
                 {"2": liv1}
@@ -286,7 +286,7 @@ def update_wpc_livehood(waterpoint, liv, liv1):
         )
         wpcl.save()
 
-def update_wpc_general(waterpoint, construction, owned, constructed, status):
+def update_wpc_general(waterpoint, construction, owned, constructed, status,male,female):
     # Verificar si ya existe un documento Wpcontent para el tipo de contenido "general" y el Waterpoint actual
     existing_wpc_general = Wpcontent.objects(type=general, waterpoint=waterpoint).first()
 
@@ -308,12 +308,14 @@ def update_wpc_general(waterpoint, construction, owned, constructed, status):
 
         content_data = {
             "title":general.name,
-            "type":"string",
+            "type":"table",
             "values": [
                {"construction": construction},
                {"owned": owned},
                {"constructed": constructed},
-               {"status in dry season": status}
+               {"status in dry season": status},
+               {"population": male+female},
+               
                 ],
             "trace": trace,
             "language": "en" 
@@ -353,7 +355,7 @@ for index, row in data.iterrows():
     owned = row['owned']
     constructed = row['constructed']
     status = row['status']
-    update_wpc_general(waterpoint, construction, owned, constructed, status)
+    update_wpc_general(waterpoint, construction, owned, constructed, status,male,female)
     update_wpc_livehood(waterpoint, liv, liv1)
     update_wpc_agriculture(waterpoint, crop1, crop2, crop3)
     update_wpc_agriculture_livestock(waterpoint, goat, sheep, cattle, camel, donkey) 

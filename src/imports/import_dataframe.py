@@ -126,12 +126,7 @@ def get_complete_dataframe_to_import():
         # Perform the spatial join
         gdf,cols=get_dataframe_shp()
         totaldataframe = gdp.sjoin(geodata, gdf, how="left", predicate="within")
-        proof11='hola soy nuevo 4.0'
-        totaldataframe['name_adm2'][0] = proof11
-        proof12='hola soy nuevo 5.0'
-        totaldataframe['name_adm3'][0] = proof12
-        proof13='hola soy nuevo 6.0'
-        totaldataframe['name_adm4'][0] = proof13
+
         totaldataframe.replace(np.nan, None, inplace=True)
         return totaldataframe
     except Exception as e:

@@ -111,3 +111,32 @@ this script goes through the postgres database and saves the climatology history
 
 ## import moinitored_data
 this script goes through the postgres database and saves the monitored data in an entity called monitored, this data corresponds to the daily information of all the variables contained in each water point.
+
+- date: `datetime` date of the monitored date.
+- values: `array` array with all the values of monitored data.
+
+## import type_content
+This script imports the different types of content that may exist in the database, such as Agriculture Context, Livestock, Crops...
+
+- name: `string` name of the type of content.
+
+## import wp_content
+This script is of a csv os different values that can have the different types of content of a water point, some contents, are:
+
+- gender: `content` information about gender in the waterpoint
+- challenges: `content` information about the challenges in thew waterpoint.
+- general: `content` general information about the waterpoint.
+- crops and livestock: `content` information about crops and livestock in the waterpoint.
+
+This script is of a csv os different values that can have the different types of content of a watershed, some contents, are:
+
+- water sources: `content` information about the watersources of the watershed
+- seasons: `content` information about the seasons in the watershed.
+- general: `content` general information about the waterpoint.
+- zone overview: `content` information about zone overview on the watershed.
+
+# CONTRIBUTORS
+
+The main contributors to this project are:
+Alliance Biodivercity & CIAT
+[Liyuhen Gebre](https://github.com/liyunet) Ethiopian Institite of Agricultural Rresearch

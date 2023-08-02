@@ -16,7 +16,7 @@ data = pd.read_csv(get_profiles_watershed_file(), delimiter=";",encoding='latin-
 gender = Typecontent.objects.get(name='gender')
 climate = Typecontent.objects.get(name='climate')
 challengue = Typecontent.objects.get(name='challenges')
-agriculture = Typecontent.objects.get(name='agriculture')
+agriculture = Typecontent.objects.get(name='agriculture context')
 livehood = Typecontent.objects.get(name='livehood')
 general = Typecontent.objects.get(name='general')
 
@@ -41,17 +41,13 @@ def update_wpc_gender(waterpoint, male, female):
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+       
         content_data = {
             "title": gender.name,
-            "type": "int",
+            "type": "icon-y",
             "values": [{"male": male}, {"female": female}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         wpc = Wpcontent(
@@ -79,17 +75,13 @@ def update_wpc_climate(waterpoint, temp, tempmax, tempmin, precipitation):
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":climate.name,
             "type":"int",
             "values": [{"temp": temp},{"tempmax": tempmax},{"tempmin": tempmin} ,{"precipitation": precipitation}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
 
@@ -102,16 +94,16 @@ def update_wpc_climate(waterpoint, temp, tempmax, tempmin, precipitation):
         wpcc.save()
 
 
-def update_wpc_challenge(waterpoint, challenge1, challenge2, challenge3, challenge4):
+def update_wpc_challenge_agriculture(waterpoint, challenge1, challenge4):
     # Verificar si ya existe un documento Wpcontent para el tipo de contenido "challenge" y el Waterpoint actual
-    existing_wpc_challenge = Wpcontent.objects(type=challengue, waterpoint=waterpoint).first()
+    existing_wpc_challenge  = Wpcontent.objects(
+        Q(type=challengue) & Q(waterpoint=waterpoint) & Q(content__title=f"{challengue.name} agriculture")
+    ).first()
 
     if existing_wpc_challenge:
         # Si el documento Wpcontent existe, actualiza los datos de los desafíos y el campo "updated" en el diccionario "trace"
         existing_wpc_challenge.content['values'][0]['1'] = challenge1
-        existing_wpc_challenge.content['values'][1]['2'] = challenge2
-        existing_wpc_challenge.content['values'][2]['3'] = challenge3
-        existing_wpc_challenge.content['values'][3]['4'] = challenge4
+        existing_wpc_challenge.content['values'][1]['2'] = challenge4
         existing_wpc_challenge.content['trace']['updated'] = datetime.now()
         existing_wpc_challenge.save()
     else:
@@ -121,17 +113,14 @@ def update_wpc_challenge(waterpoint, challenge1, challenge2, challenge3, challen
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
+
         content_data = {
-            "title":challengue.name,
-            "type":"string",
-            "values": [{"1": challenge1}, {'2': challenge2}, {'3': challenge3}, {'4': challenge4}],
+            "title":f"{challengue.name} livestock",
+            "type":"icon-x",
+            "values": [{"1": challenge1}, {'2': challenge4}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         wpcch = Wpcontent(
@@ -141,20 +130,53 @@ def update_wpc_challenge(waterpoint, challenge1, challenge2, challenge3, challen
         )
         wpcch.save()
 
-def update_wpc_agriculture(waterpoint, crop1, crop2, crop3, goat, sheep, cattle, camel, donkey):
+def update_wpc_challenge_crops(waterpoint, challenge2, challenge3):
+    # Verificar si ya existe un documento Wpcontent para el tipo de contenido "challenge" y el Waterpoint actual
+    existing_wpc_challenge  = Wpcontent.objects(
+        Q(type=challengue) & Q(waterpoint=waterpoint) & Q(content__title=f"{challengue.name} crops")
+    ).first()
+
+    if existing_wpc_challenge:
+        # Si el documento Wpcontent existe, actualiza los datos de los desafíos y el campo "updated" en el diccionario "trace"
+        existing_wpc_challenge.content['values'][0]['1'] = challenge2
+        existing_wpc_challenge.content['values'][1]['2'] = challenge3
+        existing_wpc_challenge.content['trace']['updated'] = datetime.now()
+        existing_wpc_challenge.save()
+    else:
+        # Si no existe un documento Wpcontent, crea uno nuevo
+        trace = {
+            "created": datetime.now(),
+            "updated": datetime.now(),
+            "enable": True
+        }
+
+
+        content_data = {
+            "title":f"{challengue.name} crops",
+            "type":"icon-x",
+            "values": [{"1": challenge3}, {'2': challenge3}],
+            "trace": trace,
+            "language": "en" 
+        }
+
+        wpcch = Wpcontent(
+            content=content_data,
+            waterpoint=waterpoint,
+            type=challengue,
+        )
+        wpcch.save()
+
+def update_wpc_agriculture(waterpoint, crop1, crop2, crop3):
     # Verificar si ya existe un documento Wpcontent para el tipo de contenido "agriculture" y el Waterpoint actual
-    existing_wpc_agriculture = Wpcontent.objects(type=agriculture, waterpoint=waterpoint).first()
+    existing_wpc_agriculture = Wpcontent.objects(
+        Q(type=agriculture) & Q(waterpoint=waterpoint) & Q(content__title=f"{agriculture.name} crops")
+    ).first()
 
     if existing_wpc_agriculture:
         # Si el documento Wpcontent existe, actualiza los datos de agricultura y el campo "updated" en el diccionario "trace"
         existing_wpc_agriculture.content['values'][0]['crop'] = crop1
         existing_wpc_agriculture.content['values'][1]['crop2'] = crop2
         existing_wpc_agriculture.content['values'][2]['crop3'] = crop3
-        existing_wpc_agriculture.content['values'][3]['goat'] = goat
-        existing_wpc_agriculture.content['values'][4]['sheep'] = sheep
-        existing_wpc_agriculture.content['values'][5]['cattle'] = cattle
-        existing_wpc_agriculture.content['values'][6]['camel'] = camel
-        existing_wpc_agriculture.content['values'][7]['donkey'] = donkey
         existing_wpc_agriculture.content['trace']['updated'] = datetime.now()
         existing_wpc_agriculture.save()
     else:
@@ -164,26 +186,17 @@ def update_wpc_agriculture(waterpoint, crop1, crop2, crop3, goat, sheep, cattle,
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
-            "title":agriculture.name,
-            "type":"string",
+            "title":f"{agriculture.name} crops",
+            "type":"icon-y",
             "values": [
                 {"crop": crop1},
                 {"crop2": crop2},
-                {"crop3": crop3},
-                {"goat": goat} ,
-                {"sheep": sheep},
-                {"cattle": cattle} ,
-                {"camel": camel} ,
-                {"donkey": donkey} 
+                {"crop3": crop3}
             ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         wpca = Wpcontent(
@@ -192,6 +205,51 @@ def update_wpc_agriculture(waterpoint, crop1, crop2, crop3, goat, sheep, cattle,
             type=agriculture,
         )
         wpca.save()
+
+def update_wpc_agriculture_livestock(waterpoint, goat, sheep, cattle, camel, donkey):
+    # Verificar si ya existe un documento Wpcontent para el tipo de contenido "agriculture" y el Waterpoint actual
+    existing_wpc_agriculture_livestock = Wpcontent.objects(
+        Q(type=agriculture) & Q(waterpoint=waterpoint) & Q(content__title=f"{agriculture.name} livestock")
+    ).first()
+
+    if existing_wpc_agriculture_livestock:
+        # Si el documento Wpcontent existe, actualiza los datos de agricultura y el campo "updated" en el diccionario "trace"
+        existing_wpc_agriculture_livestock.content['values'][0]['goat'] = goat
+        existing_wpc_agriculture_livestock.content['values'][1]['sheep'] = sheep
+        existing_wpc_agriculture_livestock.content['values'][2]['cattle'] = cattle
+        existing_wpc_agriculture_livestock.content['values'][3]['camel'] = camel
+        existing_wpc_agriculture_livestock.content['values'][4]['donkey'] = donkey
+        existing_wpc_agriculture_livestock.content['trace']['updated'] = datetime.now()
+        existing_wpc_agriculture_livestock.save()
+    else:
+        # Si no existe un documento Wpcontent, crea uno nuevo
+        trace = {
+            "created": datetime.now(),
+            "updated": datetime.now(),
+            "enable": True
+        }
+
+        content_data = {
+            "title":f"{agriculture.name} livestock",
+            "type":"icon-y",
+            "values": [
+                {"goat": goat} ,
+                {"sheep": sheep},
+                {"cattle": cattle} ,
+                {"camel": camel} ,
+                {"donkey": donkey} 
+            ],
+            "trace": trace,
+            "language": "en" 
+        }
+
+        wpca = Wpcontent(
+            content=content_data,
+            waterpoint=waterpoint,
+            type=agriculture,
+        )
+        wpca.save()
+
 def update_wpc_livehood(waterpoint, liv, liv1):
     # Verificar si ya existe un documento Wpcontent para el tipo de contenido "livehood" y el Waterpoint actual
     existing_wpc_livehood = Wpcontent.objects(type=livehood, waterpoint=waterpoint).first()
@@ -209,20 +267,16 @@ def update_wpc_livehood(waterpoint, liv, liv1):
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":livehood.name,
-            "type":"string",
+            "type":"icon-y",
             "values": [
                 {"1": liv},
                 {"2": liv1}
             ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         wpcl = Wpcontent(
@@ -232,7 +286,7 @@ def update_wpc_livehood(waterpoint, liv, liv1):
         )
         wpcl.save()
 
-def update_wpc_general(waterpoint, construction, owned, constructed, status):
+def update_wpc_general(waterpoint, construction, owned, constructed, status,male,female):
     # Verificar si ya existe un documento Wpcontent para el tipo de contenido "general" y el Waterpoint actual
     existing_wpc_general = Wpcontent.objects(type=general, waterpoint=waterpoint).first()
 
@@ -251,22 +305,20 @@ def update_wpc_general(waterpoint, construction, owned, constructed, status):
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":general.name,
-            "type":"string",
+            "type":"table",
             "values": [
                {"construction": construction},
                {"owned": owned},
                {"constructed": constructed},
-               {"status in dry season": status}
+               {"status in dry season": status},
+               {"population": male+female},
+               
                 ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         wpcg = Wpcontent(
@@ -303,14 +355,16 @@ for index, row in data.iterrows():
     owned = row['owned']
     constructed = row['constructed']
     status = row['status']
-    update_wpc_general(waterpoint, construction, owned, constructed, status)
+    update_wpc_general(waterpoint, construction, owned, constructed, status,male,female)
     update_wpc_livehood(waterpoint, liv, liv1)
-    update_wpc_agriculture(waterpoint, crop1, crop2, crop3, goat, sheep, cattle, camel, donkey)
-    update_wpc_challenge(waterpoint, challenge1, challenge2, challenge3, challenge4)
+    update_wpc_agriculture(waterpoint, crop1, crop2, crop3)
+    update_wpc_agriculture_livestock(waterpoint, goat, sheep, cattle, camel, donkey) 
+    update_wpc_challenge_agriculture(waterpoint, challenge1, challenge4)
+    update_wpc_challenge_crops(waterpoint, challenge2, challenge3)
     update_wpc_climate(waterpoint, temp, tempmax, tempmin, precipitation)  # antes de llamar a la función update_wpc_gender
     update_wpc_gender(waterpoint, male, female)
     # Verificar si ya existe un documento Wpcontent para el tipo de contenido "gender" y el Waterpoint actual
-    existing_wpc_gender = Wpcontent.objects(type=gender, waterpoint=waterpoint).first()
+    """ existing_wpc_gender = Wpcontent.objects(type=gender, waterpoint=waterpoint).first()
     if not existing_wpc_gender:
         male = row["male"]
         female = row["female"]
@@ -319,17 +373,13 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":gender.name,
             "type":"int",
             "values": [{"male": male},{"female":female}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos "male" y "female" si no existe
@@ -353,17 +403,13 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":climate.name,
             "type":"int",
             "values": [{"temp": temp},{"tempmax": tempmax},{"tempmin": tempmin} ,{"precipitation": precipitation}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos de clima si no existe
@@ -390,17 +436,13 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title":challengue.name,
             "type":"string",
             "values": [{"1": challenge1}, {'2': challenge2}, {'3': challenge3}, {'4': challenge4}],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos de clima si no existe
@@ -427,18 +469,11 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
+
         content_data = {
             "title": agriculture.name,
             "type":"string",
             "values": [
-                {"crop": crop1},
-                {"crop2": crop2},
-                {"crop3": crop3},
                 {"goat": goat} ,
                 {"sheep": sheep},
                 {"cattle": cattle} ,
@@ -446,7 +481,7 @@ for index, row in data.iterrows():
                 {"donkey": donkey} 
             ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos de clima si no existe
@@ -468,11 +503,6 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
         content_data = {
             "title":livehood.name,
             "type":"string",
@@ -481,7 +511,7 @@ for index, row in data.iterrows():
                 {"2": liv1}
             ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos de clima si no existe
@@ -507,11 +537,6 @@ for index, row in data.iterrows():
             "updated": datetime.now(),
             "enable": True
         }
-        languages = {
-            "spanish": "es",
-            "english": "en",
-            "amharic": "am"
-        }
         content_data = {
             "title":general.name,
             "type":"string",
@@ -522,7 +547,7 @@ for index, row in data.iterrows():
                {"status in dry season": status}
                 ],
             "trace": trace,
-            "languages": languages
+            "language": "en" 
         }
 
         # Crea y guarda el documento Wpcontent con los datos de clima si no existe
@@ -531,5 +556,5 @@ for index, row in data.iterrows():
             waterpoint=waterpoint,
             type=general,
         )
-        wpcg.save()
+        wpcg.save() """
    

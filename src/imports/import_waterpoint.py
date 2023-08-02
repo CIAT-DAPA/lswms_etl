@@ -1,5 +1,6 @@
-#import waterpoints
-
+# this etl scrips imports waterpoints to the mongodb by extracting the data from postgresql database
+#--------------------------------------------------------------------------------------------------
+#import packages and db models 
 import os
 import sys
 import geopandas as gpd
@@ -13,6 +14,7 @@ from parameters.get_connection import *
 from parameters.get_file import *
 from imports.import_dataframe import *
 
+#handle and log unexpected errors during the importing process
 def log_error(message):
     # Create an "error" folder if it doesn't exist
     error_folder = os.path.join(os.path.dirname(__file__), '..', 'error')
@@ -22,11 +24,15 @@ def log_error(message):
     error_log_file = os.path.join(error_folder, 'error_log.txt')
     with open(error_log_file, 'a') as f:
         f.write(f"{datetime.now()}: {message}\n")
-
+#main etl function to import the waterpoints with three arguments
+#dataframe 
+#cols
+#cols_waterpoint
 def etl_waterpoint(dataframe, cols, cols_waterpoint):
     count = 0
     try:
-        print('Importing waterpoints')
+        print('---------Importing waterpoints----------------')
+        print('----------------------------------------------')
         df_waterpoint = dataframe[cols].drop_duplicates()
         df_waterpoint.columns = cols_waterpoint
         print('Dimension', df_waterpoint.shape)
@@ -65,6 +71,8 @@ except Exception as e:
     sys.exit()
 
 dataframe = get_complete_dataframe_to_import()
+print('-------------------sample dataframe to be imported---------------')
+print(dataframe)
 if dataframe is not None:
     # Define the columns of the shapefile to be imported
     cols_waterpoint = ['ext_id', 'lat', 'lon', 'name', 'area', 'wsh_name']

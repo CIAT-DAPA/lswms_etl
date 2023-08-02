@@ -65,7 +65,10 @@ dataframe = get_complete_dataframe_to_import()
 if dataframe is not None:
     # Define the columns of the shapefile to be imported, code, and name for the zone and woreda
     cols_woreda = ['ext_id', 'name', 'adm1']
-    cols = ['id_adm3', 'name_adm3', 'id_adm2']
-    etl_adm2(dataframe, cols, cols_woreda)
+    df,columns= get_dataframe_shp()
+    del df
+    cols=columns[1]
+    etl_adm2(dataframe,cols,cols_woreda)
+
 else:
     log_error('Please check your shapefile and path')

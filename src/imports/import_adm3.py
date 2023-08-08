@@ -37,7 +37,7 @@ def etl_adm3(dataframe, cols, cols_kebele):
                 trace = {"created": datetime.now(), "updated": datetime.now(), "enabled": True}
                 print('Importing', name, ext_id)
                 adm2 = Adm2.objects.get(ext_id=str(row['adm3']))
-                adm3 = Adm3(name=name, ext_id=ext_id, adm2=adm2, trace=trace, aclimate_id=str(row['aclimate_id']))
+                adm3 = Adm3(name=name, ext_id=ext_id, adm2=adm2, trace=trace,)
                 adm3.save()
                 count_imported += 1
             elif adm3.name != name:
@@ -63,7 +63,7 @@ dataframe = get_complete_dataframe_to_import()
 if dataframe is not None:
     # define the columns of the shapefile to be imported, code, and name for the woreda and zone code
         #define the columns of shape file to be imported code and name for the woreda and zone code
-    cols_kebele=['ext_id','name','adm3','aclimate_id']
+    cols_kebele=['ext_id','name','adm3']
     df,columns= get_dataframe_shp()
     del df
     cols= columns[-1]

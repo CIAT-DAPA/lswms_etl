@@ -5,9 +5,9 @@ data_path='D:\ETL\data'
 #data path to the shape file
 def get_shp_file_import():
     try:
-        shape_dir = 'admin_levels_ws_id'
+        shape_dir = 'Ethiopia_AdminBoundaries'
         data = os.path.join(data_path, shape_dir)
-        file_name = 'admin_levels_ws_id'
+        file_name = 'Ethiopia_AdminBoundaries'
         file_shp = os.path.join(data, file_name + '.shp')
         if os.path.exists(file_shp):
             return file_shp

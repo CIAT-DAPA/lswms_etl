@@ -50,11 +50,28 @@ def get_dataframe_with_watershed():
 def get_dataframe_shp():
     try:
         gdf = gdp.read_file(get_shp_file_import())
+        columns_to_delete = ['OBJECTID', 'COUNT', 'T_CODE','KK_CODE','UK_NAME','UK_CODE','KK_NAME','UK_ID','Shape__Are','Shape__Len','GlobalID','T_NAME']
+# Use the 'drop' method to delete the specified columns
+        gdf = gdf.drop(columns=columns_to_delete)
+        colums_names = {
+            'R_NAME': 'name_adm1',
+            'R_CODE': 'id_adm1',
+            'Z_NAME': 'name_adm2',
+            'Z_CODE': 'id_adm2',
+            'W_NAME': 'name_adm3',
+            'W_CODE': 'id_adm3',
+            'RK_NAME': 'name_adm4',
+            'RK_CODE': 'id_adm4'
+        }
+
+# Use the 'rename' method to change column names
         # Apply coordinate systems
         adminlevels = gdf.to_crs("EPSG:4326")
+        adminlevels = adminlevels.rename(columns=colums_names)
+
         cols_adm1=['id_adm2','name_adm2']
         cols_adm2=['id_adm3','name_adm3','id_adm2']
-        cols_adm3=['id_adm4','name_adm4','id_adm3','ws_id']
+        cols_adm3=['id_adm4','name_adm4','id_adm3']
         #filter only unique columns avoid repeated columns
         list_cols=np.unique(cols_adm1+cols_adm2+cols_adm3)
         list_err=[]
@@ -98,30 +115,7 @@ def get_geo_points():
 def get_complete_dataframe_to_import():
     try:
         geodata = gdp.GeoDataFrame(get_dataframe_with_watershed(), geometry=get_geo_points(), crs="EPSG:4326")
-        
-        # Define additional points
-        proof=Point(38.318161, 12.513699)
-        proof2=Point(36.294721, 9.811474)
-        proof3=Point(36.083094, 11.060541)
-        proof4=Point(36.686477, 8.316135)
-        proof5=Point(36.608792, 11.331677)
-        proof6=Point(37.836216, 10.630065)
-        proof7=Point(36.896502, 9.886837)
-        proof8=Point(35.108797, 9.286759)
-        proof9=Point(37.942499, 11.382111)
-        proof10=Point(35.907559, 8.595833)
-        
-        # Assign the additional points to the GeoDataFrame
-        geodata['geometry'][0] = proof
-        geodata['geometry'][1] = proof2
-        geodata['geometry'][2] = proof3
-        geodata['geometry'][3] = proof4
-        geodata['geometry'][4] = proof5
-        geodata['geometry'][5] = proof6
-        geodata['geometry'][6] = proof7
-        geodata['geometry'][7] = proof8
-        geodata['geometry'][8] = proof9
-        geodata['geometry'][9] = proof10
+       
         
         # Perform the spatial join
         gdf,cols=get_dataframe_shp()
@@ -139,5 +133,4 @@ def get_complete_dataframe_to_import():
         with open(error_log_file, 'a') as f:
             f.write(str(e) + '\n')
         return None
-
 

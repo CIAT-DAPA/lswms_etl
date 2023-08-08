@@ -53,7 +53,8 @@ def etl_waterpoint(dataframe, cols, cols_waterpoint):
                     climatology=[''],
                     other_attributes=[''],
                     trace=trace,
-                    watershed=watershed
+                    watershed=watershed,
+                    aclimate_id=''
                 )
                 waterpoint.save()
                 count += 1

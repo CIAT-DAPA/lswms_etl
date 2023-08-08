@@ -21,5 +21,5 @@ def save_contents_to_database(contents):
             type.save()
 
 # Llamada a la función con el contenido deseado
-contents = ["climate", "gender", "challenges", "agriculture context", "livehood", "general","seasons","water sources","zone overview"]
+contents = ["gender", "challenges", "agriculture context", "livehood", "general","seasons","water sources","zone overview"]
 save_contents_to_database(contents)

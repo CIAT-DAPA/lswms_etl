@@ -60,14 +60,10 @@ def update_wsc_seasons(watershed, s1, s2, s3, s4,s1m,s2m,s3m,s4m):
     existing_wpc_season = Wscontent.objects(type=seasons, watershed=watershed).first()
 
     if existing_wpc_season:
-        existing_wpc_season.content['values'][0]['s1'] = s1
-        existing_wpc_season.content['values'][1]['s2'] = s2
-        existing_wpc_season.content['values'][2]['s3'] = s3
-        existing_wpc_season.content['values'][3]['s4'] = s4
-        existing_wpc_season.content['values'][4]['s1m'] = s1m
-        existing_wpc_season.content['values'][5]['s2m'] = s2m
-        existing_wpc_season.content['values'][6]['s3m'] = s3m
-        existing_wpc_season.content['values'][7]['s4m'] = s4m
+        existing_wpc_season.content['values'][0][s1] = s1m
+        existing_wpc_season.content['values'][1][s2] = s2m
+        existing_wpc_season.content['values'][2][s3] = s3m
+        existing_wpc_season.content['values'][3][s4] = s4m
         existing_wpc_season.content['trace']['updated'] = datetime.now()
         existing_wpc_season.save()
     else:

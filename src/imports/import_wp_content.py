@@ -14,7 +14,6 @@ connect(host=get_mongo_conn_str())
 
 data = pd.read_csv(get_profiles_watershed_file(), delimiter=";",encoding='latin-1')
 gender = Typecontent.objects.get(name='gender')
-climate = Typecontent.objects.get(name='climate')
 challengue = Typecontent.objects.get(name='challenges')
 agriculture = Typecontent.objects.get(name='agriculture context')
 livehood = Typecontent.objects.get(name='livehood')
@@ -56,42 +55,6 @@ def update_wpc_gender(waterpoint, male, female):
             type=gender,
         )
         wpc.save()
-def update_wpc_climate(waterpoint, temp, tempmax, tempmin, precipitation):
-    # Verificar si ya existe un documento Wpcontent para el tipo de contenido "climate" y el Waterpoint actual
-    existing_wpc_climate = Wpcontent.objects(type=climate, waterpoint=waterpoint).first()
-
-    if existing_wpc_climate:
-        # Si el documento Wpcontent existe, actualiza los datos de clima y el campo "updated" en el diccionario "trace"
-        existing_wpc_climate.content['values'][0]['temp'] = temp
-        existing_wpc_climate.content['values'][1]['tempmax'] = tempmax
-        existing_wpc_climate.content['values'][2]['tempmin'] = tempmin
-        existing_wpc_climate.content['values'][3]['precipitation'] = precipitation
-        existing_wpc_climate.content['trace']['updated'] = datetime.now()
-        existing_wpc_climate.save()
-    else:
-        # Si no existe un documento Wpcontent, crea uno nuevo
-        trace = {
-            "created": datetime.now(),
-            "updated": datetime.now(),
-            "enable": True
-        }
-
-        content_data = {
-            "title":climate.name,
-            "type":"int",
-            "values": [{"temp": temp},{"tempmax": tempmax},{"tempmin": tempmin} ,{"precipitation": precipitation}],
-            "trace": trace,
-            "language": "en" 
-        }
-
-
-
-        wpcc = Wpcontent(
-            content=content_data,
-            waterpoint=waterpoint,
-            type=climate,
-        )
-        wpcc.save()
 
 
 def update_wpc_challenge_agriculture(waterpoint, challenge1, challenge4):
@@ -154,7 +117,7 @@ def update_wpc_challenge_crops(waterpoint, challenge2, challenge3):
         content_data = {
             "title":f"{challengue.name} crops",
             "type":"icon-x",
-            "values": [{"1": challenge3}, {'2': challenge3}],
+            "values": [{"1": challenge2}, {'2': challenge3}],
             "trace": trace,
             "language": "en" 
         }
@@ -361,7 +324,6 @@ for index, row in data.iterrows():
     update_wpc_agriculture_livestock(waterpoint, goat, sheep, cattle, camel, donkey) 
     update_wpc_challenge_agriculture(waterpoint, challenge1, challenge4)
     update_wpc_challenge_crops(waterpoint, challenge2, challenge3)
-    update_wpc_climate(waterpoint, temp, tempmax, tempmin, precipitation)  # antes de llamar a la función update_wpc_gender
     update_wpc_gender(waterpoint, male, female)
     # Verificar si ya existe un documento Wpcontent para el tipo de contenido "gender" y el Waterpoint actual
     """ existing_wpc_gender = Wpcontent.objects(type=gender, waterpoint=waterpoint).first()

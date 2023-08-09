@@ -46,9 +46,9 @@ def get_watershed_file():
         return None
 
 
-def get_profiles_watershed_file():
+def get_aclimate_id():
     try:
-        file_name = 'profile'
+        file_name = 'geographics'
         file_csv_profile = os.path.join(data_path, file_name + '.csv')
         if os.path.exists(file_csv_profile):
             return file_csv_profile
@@ -60,7 +60,7 @@ def get_profiles_watershed_file():
         os.makedirs(error_folder, exist_ok=True)
 
         # Log the error message to a file
-        error_log_file = os.path.join(error_folder, 'error_geting_csv_profiles_file_log.txt')
+        error_log_file = os.path.join(error_folder, 'error_geting_csv_aclimate_file_log.txt')
         with open(error_log_file, 'a') as f:
             f.write(str(e) + '\n')
         return None

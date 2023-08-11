@@ -133,4 +133,3 @@ def get_complete_dataframe_to_import():
         with open(error_log_file, 'a') as f:
             f.write(str(e) + '\n')
         return None
-

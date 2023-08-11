@@ -78,7 +78,7 @@ def etl_wpcontent(dataframe):
         for index, row in dataframe[dataframe['location_id'] == i].iterrows():
             trace = {"created": datetime.now(), "updated": datetime.now(), "enabled": True}
             values_list = [{'type': 'depth', 'value': row['depth']}, {'type': 'evp', 'value': row['evap']},
-                           {'type': 'rain', 'value': row['rain']}]
+                           {'type': 'rain', 'value': row['rain']},{'type': 'scaled_depth', 'value': row['scaled_depth']}]
             climate_list = [{"month": row['month'], "day": row['day'], "values": values_list}]
             climate.append(climate_list)
         try:
